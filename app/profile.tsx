@@ -1,17 +1,17 @@
 import { router } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
-export default function HomeScreen() {
+export default function Profile() {
   return (
     <View className="flex-1 items-center justify-center">
-      <Text>Home Page</Text>
+      <Text>Profile Page</Text>
 
       <Pressable
-        className="bg-blue-500 p-4 rounded-xl mt-4"
-        onPress={() => router.push("/profile")}
+        className="bg-red-500 p-4 rounded-xl mt-4"
+        onPress={() => router.back()}
       >
         <Text className="text-white">
-          Перейти до профілю
+          Назад
         </Text>
       </Pressable>
     </View>
