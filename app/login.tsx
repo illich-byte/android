@@ -1,5 +1,6 @@
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, Text, TextInput, View } from "react-native";
+import { useLoginMutation } from "../store/api";
 
 type LoginForm = {
   email: string;
@@ -9,8 +10,19 @@ type LoginForm = {
 export default function LoginScreen() {
   const { control, handleSubmit } = useForm<LoginForm>();
 
-  const onSubmit = (data: LoginForm) => {
-    console.log(data);
+  const [login, { isLoading }] = useLoginMutation();
+
+  const onSubmit = async (data: LoginForm) => {
+    try {
+      const result = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+
+      console.log("Успішний вхід:", result);
+    } catch (error) {
+      console.log("Помилка:", error);
+    }
   };
 
   return (
@@ -27,6 +39,8 @@ export default function LoginScreen() {
           <TextInput
             className="bg-white border border-gray-300 rounded-xl p-4 mb-4"
             placeholder="Email"
+            autoCapitalize="none"
+            keyboardType="email-address"
             value={value}
             onChangeText={onChange}
           />
@@ -51,9 +65,10 @@ export default function LoginScreen() {
       <Pressable
         className="bg-blue-500 p-4 rounded-xl"
         onPress={handleSubmit(onSubmit)}
+        disabled={isLoading}
       >
         <Text className="text-white text-center font-bold">
-          Увійти
+          {isLoading ? "Завантаження..." : "Увійти"}
         </Text>
       </Pressable>
     </View>
